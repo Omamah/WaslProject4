@@ -28,6 +28,7 @@
     <dimen name="register_two_activity_login_button_margin_end">23dp</dimen>
 
 
+
     <!-- SignUpActivity -->
     <dimen name="sign_up_activity_confirm_password_constraint_layout_border_size">0dp</dimen>
     <dimen name="sign_up_activity_password_constraint_layout_border_size">0dp</dimen>
@@ -528,4 +529,5 @@
     <dimen name="nav_header_vertical_spacing">8dp</dimen>
     <dimen name="nav_header_height">176dp</dimen>
     <dimen name="fab_margin">16dp</dimen>
+
 </resources>
