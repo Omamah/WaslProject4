@@ -1,8 +1,10 @@
 package com.company_name.wasl_project4.activity;
 
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -12,15 +14,17 @@ import com.company_name.wasl_project4.R;
 public class detailsEvent extends AppCompatActivity {
 
 
-    ImageView event_img;
-    TextView for_txt;
-    TextView adress_txt;
-    TextView  Time_txt;
-    TextView Desc_txt;
-    String for_whom;
-    String Adress;
-    String Time;
-    String Desc;
+    private ImageView event_img;
+    private TextView for_txt;
+    private TextView adress_txt;
+    private TextView  Time_txt;
+    private TextView Desc_txt;
+    private String for_whom;
+    private String Adress;
+    private String Time;
+    private String Desc;
+    private FloatingActionButton fab;
+
 
     String img_uri;
     String selectedKey;
@@ -36,8 +40,27 @@ public class detailsEvent extends AppCompatActivity {
         adress_txt = findViewById(R.id.adress_txt);
         Time_txt = findViewById(R.id.Time_txt);
         Desc_txt = findViewById(R.id.Desc_txt);
+        fab = (FloatingActionButton) findViewById(R.id.fab);
+
+
+        //registration {fab} event listener
+        fab.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+
+        init();
+
+        }
+
+    private void init() {
         // String uri ="https://firebasestorage.googleapis.com/v0/b/myapp-5e601.appspot.com/o/uploads%2F1556376298097.jpg?alt=media&token=7cf1ef7c-27df-49de-bd4e-86893fc42879";
         //String ur ="https://myapp-5e601.firebaseio.com/uploads";
+
+        //get event info from the firebase and fill widgets with
         Bundle b1 = getIntent().getExtras();
         if (!b1.isEmpty()) {
             img_uri = b1.getString("img");
@@ -52,9 +75,8 @@ public class detailsEvent extends AppCompatActivity {
             Desc_txt.setText((String.valueOf(Desc)));
 
             Log.d("View", "IMAGE URL IS:" + img_uri);
-
             Glide.with(getApplicationContext()).load(img_uri).into(event_img);
 
-        }
     }
+}
 }
