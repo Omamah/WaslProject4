@@ -10,11 +10,7 @@
         android:theme="@style/AppTheme.NoActionBar">
         <activity android:name=".activity.detailsEvent"></activity>
         <activity android:name=".activity.MainActivity">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
 
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".activity.studet_staff_homePage"
@@ -28,7 +24,14 @@
         <activity android:name=".activity.add_event" />
         <activity android:name=".activity.editOrganizerProfile" />
         <activity android:name=".activity.organizerProfile" />
-        <activity android:name=".activity.homeEvent" />
+        <activity android:name=".activity.homeEvent" >
+
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.RegisterTwoActivity"
             android:label="@string/register_two_activity_title"

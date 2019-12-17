@@ -1,14 +1,20 @@
 package com.company_name.wasl_project4.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.NavigationView;
-import android.util.Log;
-import android.widget.FrameLayout;
+import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
 import com.company_name.wasl_project4.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.squareup.picasso.Picasso;
 
 public class get_images extends HomePage {
 
@@ -19,22 +25,27 @@ public class get_images extends HomePage {
     TextView adress_txt;
     TextView  Time_txt;
     TextView Desc_txt;
-    String for_whom;
-    String Adress;
-    String Time;
-    String Desc;
 
-    String img_uri;
-    String selectedKey;
+
+    String selectedKey = null;
+
+
+    private DatabaseReference mDatabase;
+    private Button deleteBtn;
+    private FirebaseAuth mAuth;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
         super.onCreate(savedInstanceState);
 
-        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); // this is the FrameLayout area within your activity_main.xml
-        getLayoutInflater().inflate(R.layout.activity_get_images, contentFrameLayout);
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.getMenu().getItem(0).setChecked(true);
+        setContentView(R.layout.activity_get_images);
+
+//
+//        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); // this is the FrameLayout area within your activity_main.xml
+//        getLayoutInflater().inflate(R.layout.activity_get_images, contentFrameLayout);
+//        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
+//        navigationView.getMenu().getItem(0).setChecked(true);
 
 
         event_img = (ImageView)findViewById(R.id.event_img);
@@ -42,28 +53,58 @@ public class get_images extends HomePage {
         adress_txt = findViewById(R.id.adress_txt);
         Time_txt = findViewById(R.id.Time_txt);
         Desc_txt = findViewById(R.id.Desc_txt);
-        // String uri ="https://firebasestorage.googleapis.com/v0/b/myapp-5e601.appspot.com/o/uploads%2F1556376298097.jpg?alt=media&token=7cf1ef7c-27df-49de-bd4e-86893fc42879";
-        //String ur ="https://myapp-5e601.firebaseio.com/uploads";
-        Bundle b1= getIntent().getExtras();
-        if (!b1.isEmpty()){
-            img_uri= b1.getString("img");
-            for_whom = b1.getString("For");
-            Adress = b1.getString("Adress");
-            Time = b1.getString("Time");
-            Desc = b1.getString("Desc");
-            selectedKey = b1.getString("Key");
-            for_txt.setText((String.valueOf(for_whom)));
-            adress_txt.setText((String.valueOf(Adress)));
-            Time_txt.setText((String.valueOf(Time)));
-            Desc_txt.setText((String.valueOf(Desc)));
+        deleteBtn = (Button)findViewById(R.id.deleteBtn);
 
-            Log.d("View", "IMAGE URL IS:"+img_uri );
+        mDatabase = FirebaseDatabase.getInstance().getReference("uploads");
+        mAuth = FirebaseAuth.getInstance();
 
-            Glide.with(getApplicationContext()).load(img_uri).into(event_img);
+        selectedKey = getIntent().getExtras().getString("EventID");
+
+        deleteBtn.setVisibility(View.INVISIBLE);
+
+        deleteBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                mDatabase.child(selectedKey).removeValue();
+
+                Intent eventsHome = new Intent(get_images.this, homeEvent.class);
+                startActivity(eventsHome);
+            }
+        });
+
+
+        mDatabase.child(selectedKey).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                String event_desc = (String) dataSnapshot.child("desc").getValue();
+                String event_image = (String) dataSnapshot.child("imageUrl").getValue();
+                String event_time = (String) dataSnapshot.child("time").getValue();
+                String event_for = (String) dataSnapshot.child("for").getValue();
+                String event_address = (String) dataSnapshot.child("adress").getValue();
+
+                String post_uid = (String) dataSnapshot.child("organizer").getValue();
+
+                for_txt.setText((String.valueOf(event_for)));
+                adress_txt.setText((String.valueOf(event_address)));
+                Time_txt.setText((String.valueOf(event_time)));
+                Desc_txt.setText((String.valueOf(event_desc)));
+
+                Picasso.with(get_images.this).load(event_image).into(event_img);
+
+                if (mAuth.getCurrentUser().getUid().equals(post_uid)){
+                    deleteBtn.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+            }
+        });
+
 
 
         }
 
 
     }
-}

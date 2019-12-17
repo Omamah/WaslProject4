@@ -2,6 +2,9 @@ package com.company_name.wasl_project4.activity;
 
 import com.google.firebase.database.Exclude;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class Upload {
     private String mName;
     private String mImageUrl;
@@ -11,14 +14,15 @@ public class Upload {
     private  String mDesc;
     private  String mKey;
     private  String mOrganizer;
+    private static Map<String, String> usersToQR = new HashMap<>();
+
 
     public Upload() {
         //empty constructor needed
     }
 
 
-
-    public Upload(String name, String imageUrl , String foor , String adress , String  time , String  desc ,String organizer ) {
+    public Upload(String name, String imageUrl , String foor , String adress , String  time , String desc ,String organizer ) {
         if (name.trim().equals("")) {
             name = "No Name";
         }
@@ -31,6 +35,14 @@ public class Upload {
         mDesc = desc;
         mOrganizer=organizer;
 
+    }
+
+    public static Map<String, String> getUsersToQR() {
+        return usersToQR;
+    }
+
+    public void setUsersToQR(Map<String, String> usersToQR) {
+        this.usersToQR = usersToQR;
     }
 
     public String getDesc() {

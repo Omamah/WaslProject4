@@ -10,6 +10,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 import com.company_name.wasl_project4.R;
+import com.company_name.wasl_project4.confirmationDialog;
 
 public class detailsEvent extends AppCompatActivity {
 
@@ -24,6 +25,7 @@ public class detailsEvent extends AppCompatActivity {
     private String Time;
     private String Desc;
     private FloatingActionButton fab;
+
 
 
     String img_uri;
@@ -47,7 +49,8 @@ public class detailsEvent extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
+                Bundle b1 = getIntent().getExtras();
+                openDialog(b1.getString("Key"));
             }
         });
 
@@ -56,7 +59,7 @@ public class detailsEvent extends AppCompatActivity {
 
         }
 
-    private void init() {
+    public void init() {
         // String uri ="https://firebasestorage.googleapis.com/v0/b/myapp-5e601.appspot.com/o/uploads%2F1556376298097.jpg?alt=media&token=7cf1ef7c-27df-49de-bd4e-86893fc42879";
         //String ur ="https://myapp-5e601.firebaseio.com/uploads";
 
@@ -74,9 +77,18 @@ public class detailsEvent extends AppCompatActivity {
             Time_txt.setText((String.valueOf(Time)));
             Desc_txt.setText((String.valueOf(Desc)));
 
+
             Log.d("View", "IMAGE URL IS:" + img_uri);
             Glide.with(getApplicationContext()).load(img_uri).into(event_img);
 
     }
 }
+
+    public void openDialog(String event){
+        confirmationDialog dialog = new confirmationDialog(event);
+        dialog.show(getSupportFragmentManager(),"Confirmation Dialog");
+
+    }
+
+
 }
