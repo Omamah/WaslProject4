@@ -82,7 +82,6 @@ public class homeEvent extends HomePage  {
         usersRef = FirebaseDatabase.getInstance().getReference("Users");
 
 
-
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             public void onAuthStateChanged() {
                 onAuthStateChanged();
