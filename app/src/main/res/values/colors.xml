@@ -15,7 +15,7 @@
 	<!-- Customize your theme here. -->
 	<color name="colorPrimary">#67B1A7</color>
 	<color name="colorPrimaryDark">#24776B</color>
-	<color name="colorAccent">#FFFFFF</color>
+	<color name="colorAccent">#000000</color>
 
 	<!-- RegisterTwoActivity -->
 	<color name="register_two_activity_register_constraint_layout_background_color">#FFFFFF</color>

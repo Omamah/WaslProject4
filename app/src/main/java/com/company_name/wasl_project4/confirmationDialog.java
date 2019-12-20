@@ -10,7 +10,6 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 
-import com.company_name.wasl_project4.activity.Attendance;
 import com.company_name.wasl_project4.activity.Upload;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -76,7 +75,7 @@ public class confirmationDialog extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     isComfirmed=true;
-//                    createRegestration(event);
+                    createRegestration(event);
                     }
 
                 });
@@ -86,7 +85,7 @@ public class confirmationDialog extends AppCompatDialogFragment {
 
     public void createRegestration(String Event){
 
-        Attendance  attendance = new Attendance("Ldcrqy_6XGwbnQJLBVG");
+        Upload  upload = new Upload();
         String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
         Upload.getUsersToQR().put("QR CODE HERE", userId);
 

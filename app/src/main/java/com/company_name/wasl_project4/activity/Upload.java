@@ -41,7 +41,7 @@ public class Upload {
         return usersToQR;
     }
 
-    public void setUsersToQR(Map<String, String> usersToQR) {
+    public void setUsersToQR (Map<String, String> usersToQR) {
         this.usersToQR = usersToQR;
     }
 
