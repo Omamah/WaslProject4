@@ -6,20 +6,39 @@ import java.util.Map;
 
 public class Attendance {
 
-    public Map<String, String>  usersToQR = new HashMap<>();
+    String id;
+    public HashMap<String, String>  usersToQR = new HashMap<>();
     private String eventId;
-    private boolean isFirst;
+    private int counter=0;
 
-    public Attendance(String eventId) {
-        this.eventId = eventId;
+
+    public Attendance(String id) {
+        this.id = id;
+        this.counter++;
     }
 
     public Map<String, String> getUsersToQR() {
         return usersToQR;
     }
 
-    public void setUsersToQR(Map<String, String> usersToQR) {
+    public void setUsersToQR(HashMap<String, String> usersToQR) {
         this.usersToQR = usersToQR;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public int getCounter() {
+        return counter;
+    }
+
+    public void setCounter(int counter) {
+        this.counter = counter;
     }
 
     public String getEventId() {
@@ -30,11 +49,5 @@ public class Attendance {
         this.eventId = eventId;
     }
 
-    public boolean isFirst() {
-        return isFirst;
-    }
 
-    public void setFirst(boolean first) {
-        isFirst = first;
-    }
 }

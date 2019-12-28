@@ -102,14 +102,9 @@ public class studet_staff_homePage extends AppCompatActivity implements ImageAda
 
     @Override
     public void onItemClick(int position) {
-        Toast.makeText(this, "Normal click at position: " + position, Toast.LENGTH_SHORT).show();
-    }
-
-    @Override
-    public void onWhatEverClick(int position) {
-        Toast.makeText(this, "Whatever click at position: " + position, Toast.LENGTH_SHORT).show();
         Upload selectedItem = mUploads.get(position);
         final String selectedKey = selectedItem.getKey();
+
 
         StorageReference imageRef = mStorage.getReferenceFromUrl(selectedItem.getImageUrl());
         Intent i = new Intent(studet_staff_homePage.this, detailsEvent.class);
@@ -127,13 +122,13 @@ public class studet_staff_homePage extends AppCompatActivity implements ImageAda
     }
 
     @Override
-    public void onDeleteClick(int position) {
-        Upload selectedItem = mUploads.get(position);
-        final String selectedKey = selectedItem.getKey();
+    public void onWhatEverClick(int position) {
 
-        StorageReference imageRef = mStorage.getReferenceFromUrl(selectedItem.getImageUrl());
-        Toast.makeText(studet_staff_homePage.this, "Can't Delete This Item go to your Event page to delete", Toast.LENGTH_LONG).show();
     }
+
+    @Override
+    public void onDeleteClick(int position) {
+        }
 
     @Override
     protected void onDestroy() {

@@ -84,10 +84,9 @@ public class detailsEvent extends AppCompatActivity {
     }
 }
 
-    public void openDialog(String event){
-        confirmationDialog dialog = new confirmationDialog(event);
+    public void openDialog(String eventID){
+        confirmationDialog dialog = new confirmationDialog(eventID);
         dialog.show(getSupportFragmentManager(),"Confirmation Dialog");
-
     }
 
 

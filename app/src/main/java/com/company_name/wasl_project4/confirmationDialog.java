@@ -3,19 +3,25 @@ package com.company_name.wasl_project4;
 import android.annotation.SuppressLint;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.graphics.Bitmap;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ImageView;
 
-import com.company_name.wasl_project4.activity.Upload;
+import com.company_name.wasl_project4.activity.Attendance;
+import com.company_name.wasl_project4.activity.qr_activity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.StorageReference;
+
+import androidmads.library.qrgenearator.QRGEncoder;
 
 @SuppressLint("ValidFragment")
 public class confirmationDialog extends AppCompatDialogFragment {
@@ -30,14 +36,17 @@ public class confirmationDialog extends AppCompatDialogFragment {
     private DatabaseReference myRef;
     FirebaseUser user;
     private String userID;
+    private ImageView qrCodeImageView;//change place
+    private Bitmap bitmap;//change place
+    private QRGEncoder qrgEncoder;//change place
 
 
     private boolean isComfirmed;
-    private String event;
+    private String eventID;
 
     @SuppressLint("ValidFragment")
-    public confirmationDialog(String event) {
-        this.event=event;
+    public confirmationDialog(String eventID) {
+        this.eventID=eventID;
     }
 
 
@@ -51,7 +60,7 @@ public class confirmationDialog extends AppCompatDialogFragment {
         View view = inflater.inflate(R.layout.confirmation_dialog,null);
 
 
-         mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads");
+         mDatabaseRef = FirebaseDatabase.getInstance().getReference("attendance");
 
          //getting user info
         mAuth=FirebaseAuth.getInstance();
@@ -75,7 +84,7 @@ public class confirmationDialog extends AppCompatDialogFragment {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
                     isComfirmed=true;
-                    createRegestration(event);
+                    createRegestration();
                     }
 
                 });
@@ -83,11 +92,29 @@ public class confirmationDialog extends AppCompatDialogFragment {
         return builder.create();
     }
 
-    public void createRegestration(String Event){
+    public void createRegestration(){
+        // Creating Bundle object
+        Bundle b = new Bundle();
 
-        Upload  upload = new Upload();
-        String userId = FirebaseAuth.getInstance().getCurrentUser().getUid();
-        Upload.getUsersToQR().put("QR CODE HERE", userId);
+        String qrCode= userID+eventID.trim();
+
+        String attendanceID = mDatabaseRef.push().getKey();
+        Attendance attendance=new Attendance(attendanceID);
+        attendance.setEventId(eventID);
+        attendance.getUsersToQR().put(userID,qrCode);
+
+        // Storing data into bundle
+        b.putString("qrCode", qrCode);
+        mDatabaseRef.child(attendanceID).setValue(attendance);
+
+        // Creating Intent object
+        Intent intent = new Intent(getContext(), qr_activity.class);
+
+        // Storing bundle object into intent
+        intent.putExtras(b);
+        startActivity(intent);
+    }
+
 
 //        Bundle b1 = getIntent().getExtras();
 
@@ -110,5 +137,5 @@ public class confirmationDialog extends AppCompatDialogFragment {
 
 
 
-    }
+
 

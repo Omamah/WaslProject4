@@ -176,6 +176,7 @@ public class organizer extends Fragment {
                             Intent i=new Intent(getContext(), editOrganizerProfile.class);
                             Toast.makeText(getContext(), "User Register successfully", Toast.LENGTH_LONG).show();
                         }
+
                         else{
                             Toast.makeText(getContext(), "User Does not Register ", Toast.LENGTH_LONG).show();
                          }
