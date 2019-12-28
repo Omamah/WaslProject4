@@ -6,15 +6,12 @@ import java.util.Map;
 
 public class Attendance {
 
-    String id;
     public HashMap<String, String>  usersToQR = new HashMap<>();
     private String eventId;
     private int counter=0;
 
 
-    public Attendance(String id) {
-        this.id = id;
-        this.counter++;
+    public Attendance() {
     }
 
     public Map<String, String> getUsersToQR() {
@@ -25,20 +22,13 @@ public class Attendance {
         this.usersToQR = usersToQR;
     }
 
-    public String getId() {
-        return id;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
 
     public int getCounter() {
         return counter;
     }
 
-    public void setCounter(int counter) {
-        this.counter = counter;
+    public void setCounter() {
+        this.counter ++;
     }
 
     public String getEventId() {

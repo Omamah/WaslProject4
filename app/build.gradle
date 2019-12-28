@@ -92,8 +92,9 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
 
-    //GR genrator
+    //QR genrator
     implementation 'androidmads.library.qrgenearator:QRGenearator:1.0.3'
+
 
     //Glide Library
     implementation 'com.github.bumptech.glide:glide:4.9.0'

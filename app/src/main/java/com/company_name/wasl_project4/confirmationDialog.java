@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
@@ -17,8 +18,11 @@ import com.company_name.wasl_project4.activity.Attendance;
 import com.company_name.wasl_project4.activity.qr_activity;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -95,20 +99,63 @@ public class confirmationDialog extends AppCompatDialogFragment {
     public void createRegestration(){
         // Creating Bundle object
         Bundle b = new Bundle();
-
         String qrCode= userID+eventID.trim();
 
-        String attendanceID = mDatabaseRef.push().getKey();
-        Attendance attendance=new Attendance(attendanceID);
-        attendance.setEventId(eventID);
-        attendance.getUsersToQR().put(userID,qrCode);
 
-        // Storing data into bundle
-        b.putString("qrCode", qrCode);
-        mDatabaseRef.child(attendanceID).setValue(attendance);
+
+
+        mDatabaseRef.child(eventID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            // this listener return the snapshot as acopy of current changed record in firebase database  throgh dataSnapshot object
+            {
+                Attendance  attendanceTemp =dataSnapshot.getValue(Attendance.class); // we get the values from snapshot b y using getValue in the
+                // format of User class which the database record object in the same formate
+
+                if(attendanceTemp==null)
+                {    Attendance attendance = new Attendance();
+                        attendance.setEventId(eventID);
+                        attendance.setCounter();
+                        attendance.getUsersToQR().put(userID, qrCode);
+
+                        // Storing data into bundle
+                        b.putString("qrCode", qrCode);
+
+                        mDatabaseRef.child(eventID).setValue(attendance);
+                        Log.d("EEERRE", "onDataChange:  if this is NEW");
+
+                    }
+
+                else
+                {
+
+                    Attendance attendance=attendanceTemp;
+                    if(!attendance.getUsersToQR().containsKey(userID)) {
+                        attendance.setCounter();}//to update the attendance counter if user is new attender
+                    attendance.getUsersToQR().put(userID,qrCode);
+
+                    // Storing data into bundle
+                    b.putString("qrCode", qrCode);
+
+
+
+                    mDatabaseRef.child(eventID).setValue(attendance);
+                    Log.d("EEERRE", "onDataChange:  else this is not new it's updated ");
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
         // Creating Intent object
         Intent intent = new Intent(getContext(), qr_activity.class);
+        b.putString("qrCode", qrCode);
 
         // Storing bundle object into intent
         intent.putExtras(b);
