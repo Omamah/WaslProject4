@@ -305,6 +305,17 @@
                     app:layout_constraintRight_toRightOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/oval_constraint_layout"
                     app:layout_constraintTop_toBottomOf="@+id/about_text_view" />
+
+                <Button
+                    android:id="@+id/deleteBtn"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="#FFEA0404"
+                    android:text="delete post"
+                    android:textColor="#fff"
+                    android:textStyle="bold"
+                    app:layout_constraintBottom_toBottomOf="@+id/Desc_txt"
+                    app:layout_constraintTop_toBottomOf="@+id/Desc_txt" />
             </android.support.constraint.ConstraintLayout>
 
         </android.support.constraint.ConstraintLayout>
