@@ -17,6 +17,10 @@
 	<color name="colorPrimaryDark">#24776B</color>
 	<color name="colorAccent">#000000</color>
 
+	<!--colors for light mode-->
+	<color name="contentTextColor">#020000</color>
+	<color name="whiteTextColor">#fff</color>
+
 	<!-- RegisterTwoActivity -->
 	<color name="register_two_activity_register_constraint_layout_background_color">#FFFFFF</color>
 	<color name="register_two_activity_register_constraint_layout_border_color">#979797</color>

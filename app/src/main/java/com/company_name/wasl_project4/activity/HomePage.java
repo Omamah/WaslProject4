@@ -78,6 +78,13 @@ public class HomePage extends AppCompatActivity  {
                                 drawerLayout.closeDrawers();
                                 break;
 
+                            case R.id.nav_qr_scanner:
+                                Intent dfIntent = new Intent(getApplicationContext(), qr_scanner.class);
+                                startActivity(dfIntent);
+                                finish();
+                                drawerLayout.closeDrawers();
+                                break;
+
                             case R.id.nav_logOut:
                                 FirebaseAuth.getInstance().signOut();
                                 finish();

@@ -15,7 +15,9 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.company_name.wasl_project4.activity.Attendance;
+import com.company_name.wasl_project4.activity.UserClass;
 import com.company_name.wasl_project4.activity.qr_activity;
+import com.company_name.wasl_project4.activity.userAttended;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -40,6 +42,8 @@ public class confirmationDialog extends AppCompatDialogFragment {
     private DatabaseReference myRef;
     FirebaseUser user;
     private String userID;
+    String name;
+
     private ImageView qrCodeImageView;//change place
     private Bitmap bitmap;//change place
     private QRGEncoder qrgEncoder;//change place
@@ -49,8 +53,7 @@ public class confirmationDialog extends AppCompatDialogFragment {
     private String eventID;
 
     @SuppressLint("ValidFragment")
-    public confirmationDialog(String eventID) {
-        this.eventID=eventID;
+    public confirmationDialog(String eventID) {this.eventID=eventID;
     }
 
 
@@ -100,7 +103,27 @@ public class confirmationDialog extends AppCompatDialogFragment {
         // Creating Bundle object
         Bundle b = new Bundle();
         String qrCode= userID+eventID.trim();
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange( DataSnapshot dataSnapshot) {
+                UserClass user =dataSnapshot.getValue(UserClass.class);
+                if(user!=null)
+                {
+                    name=user.getUsername();
+                    System.out.println("Name HERE KSN"+name);
+                }
 
+                else
+                {//no user
+                }
+            }
+
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
 
 
 
@@ -116,8 +139,18 @@ public class confirmationDialog extends AppCompatDialogFragment {
                 {    Attendance attendance = new Attendance();
                         attendance.setEventId(eventID);
                         attendance.setCounter();
-                        attendance.getUsersToQR().put(userID, qrCode);
+                        attendance.setAbsent(attendance.getCounter());
+                    attendance.listIdtoUsers.put(userID,attendance.userAttendedList.size());
 
+                    attendance.getUsersToQR().put(userID, qrCode);
+//                        attendance.nameToAttended.put(name,false);
+
+                    userAttended userRegestered = new userAttended(name,"false");
+                    userRegestered.setId(attendance.userAttendedList.size());
+                    attendance.userAttendedList.add(userRegestered);
+
+
+                    attendance.AttendedUsers.put(userID,false);
                         // Storing data into bundle
                         b.putString("qrCode", qrCode);
 
@@ -131,18 +164,26 @@ public class confirmationDialog extends AppCompatDialogFragment {
 
                     Attendance attendance=attendanceTemp;
                     if(!attendance.getUsersToQR().containsKey(userID)) {
-                        attendance.setCounter();}//to update the attendance counter if user is new attender
+                        attendance.setCounter();
+                        attendance.setAbsent(attendance.getCounter());
+                        attendance.listIdtoUsers.put(userID,attendance.userAttendedList.size());
+                        userAttended userRegestered = new userAttended(name, "false");
+                        userRegestered.setId(attendance.userAttendedList.size());
+                        attendance.userAttendedList.add(userRegestered);
+                    }//to update the attendance counter if user is new attender
+
+
                     attendance.getUsersToQR().put(userID,qrCode);
+                    attendance.AttendedUsers.put(userID,false);
+
+//                    attendance.nameToAttended.put(name,false);
+
 
                     // Storing data into bundle
                     b.putString("qrCode", qrCode);
 
-
-
                     mDatabaseRef.child(eventID).setValue(attendance);
                     Log.d("EEERRE", "onDataChange:  else this is not new it's updated ");
-
-
                 }
             }
 

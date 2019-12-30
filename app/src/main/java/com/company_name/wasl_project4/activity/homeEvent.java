@@ -144,7 +144,7 @@ public class homeEvent extends HomePage  {
                 usersRef.child(model.getOrganizer()).addValueEventListener(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
-                         orgnizerName = (String) dataSnapshot.child("name").getValue();
+                        orgnizerName = (String) dataSnapshot.child("name").getValue();
 //                         orgnizerImgUrl=(String) dataSnapshot.child("").getValue());
                     }
 
