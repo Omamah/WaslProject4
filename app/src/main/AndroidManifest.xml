@@ -2,19 +2,32 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.company_name.wasl_project4">
 
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.hardware.camera" />
+    <uses-permission android:name="android.hardware.camera.autofocus" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
-
+        <activity android:name=".showAttendance">
+        </activity>
+        <activity android:name=".activity.qr_scanner">
+        </activity>
+        <activity android:name=".activity.qr_activity" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyC_u-CPShUq1scKNaeQuWNsRqy9mRiK8NM" />
-        <activity android:name=".activity.qr_activity"></activity>
         <activity android:name=".activity.detailsEvent" />
-        <activity android:name=".activity.MainActivity"></activity>
+        <activity android:name=".activity.MainActivity" >
+            <intent-filter>
+                <category android:name="android.intent.category.LAUNCHER" />
+
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
         <activity
             android:name=".activity.studet_staff_homePage"
             android:label="@string/title_activity_studet_staff_home_page" />
@@ -27,13 +40,7 @@
         <activity android:name=".activity.add_event" />
         <activity android:name=".activity.editOrganizerProfile" />
         <activity android:name=".activity.organizerProfile" />
-        <activity android:name=".activity.homeEvent">
-            <intent-filter>
-                <category android:name="android.intent.category.LAUNCHER" />
-
-                <action android:name="android.intent.action.MAIN" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".activity.homeEvent"></activity>
         <activity
             android:name=".activity.RegisterTwoActivity"
             android:label="@string/register_two_activity_title"

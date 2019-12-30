@@ -27,6 +27,9 @@
     <dimen name="register_two_activity_login_button_margin_bottom">38dp</dimen>
     <dimen name="register_two_activity_login_button_margin_end">23dp</dimen>
 
+    <!-- Default screen margins, per the Android Design guidelines. -->
+    <dimen name="headerTextSize">30sp</dimen>
+
 
 
     <!-- SignUpActivity -->

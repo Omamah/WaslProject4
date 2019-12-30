@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/editor/ic_mode_edit_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/Applications/Android%20Studio.app/Contents/plugins/android/lib/android.jar!/images/material_design_icons/image/ic_linked_camera_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -29,7 +29,7 @@
                         <option name="values">
                           <map>
                             <entry key="color" value="fbfbff" />
-                            <entry key="outputName" value="ic_mode_edit_white" />
+                            <entry key="outputName" value="ic_scan_camera" />
                             <entry key="sourceFile" value="$USER_HOME$" />
                           </map>
                         </option>

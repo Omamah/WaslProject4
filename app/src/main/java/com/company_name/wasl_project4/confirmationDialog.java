@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatDialogFragment;
 import android.util.Log;
@@ -14,11 +15,16 @@ import android.view.View;
 import android.widget.ImageView;
 
 import com.company_name.wasl_project4.activity.Attendance;
+import com.company_name.wasl_project4.activity.UserClass;
 import com.company_name.wasl_project4.activity.qr_activity;
+import com.company_name.wasl_project4.activity.userAttended;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.StorageReference;
 
 import androidmads.library.qrgenearator.QRGEncoder;
@@ -36,6 +42,8 @@ public class confirmationDialog extends AppCompatDialogFragment {
     private DatabaseReference myRef;
     FirebaseUser user;
     private String userID;
+    String name;
+
     private ImageView qrCodeImageView;//change place
     private Bitmap bitmap;//change place
     private QRGEncoder qrgEncoder;//change place
@@ -45,8 +53,7 @@ public class confirmationDialog extends AppCompatDialogFragment {
     private String eventID;
 
     @SuppressLint("ValidFragment")
-    public confirmationDialog(String eventID) {
-        this.eventID=eventID;
+    public confirmationDialog(String eventID) {this.eventID=eventID;
     }
 
 
@@ -95,20 +102,101 @@ public class confirmationDialog extends AppCompatDialogFragment {
     public void createRegestration(){
         // Creating Bundle object
         Bundle b = new Bundle();
-
         String qrCode= userID+eventID.trim();
+        myRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange( DataSnapshot dataSnapshot) {
+                UserClass user =dataSnapshot.getValue(UserClass.class);
+                if(user!=null)
+                {
+                    name=user.getUsername();
+                    System.out.println("Name HERE KSN"+name);
+                }
 
-        String attendanceID = mDatabaseRef.push().getKey();
-        Attendance attendance=new Attendance(attendanceID);
-        attendance.setEventId(eventID);
-        attendance.getUsersToQR().put(userID,qrCode);
+                else
+                {//no user
+                }
+            }
 
-        // Storing data into bundle
-        b.putString("qrCode", qrCode);
-        mDatabaseRef.child(attendanceID).setValue(attendance);
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
+
+
+        mDatabaseRef.child(eventID).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot)
+            // this listener return the snapshot as acopy of current changed record in firebase database  throgh dataSnapshot object
+            {
+                Attendance  attendanceTemp =dataSnapshot.getValue(Attendance.class); // we get the values from snapshot b y using getValue in the
+                // format of User class which the database record object in the same formate
+
+                if(attendanceTemp==null)
+                {    Attendance attendance = new Attendance();
+                        attendance.setEventId(eventID);
+                        attendance.setCounter();
+                        attendance.setAbsent(attendance.getCounter());
+                    attendance.listIdtoUsers.put(userID,attendance.userAttendedList.size());
+
+                    attendance.getUsersToQR().put(userID, qrCode);
+//                        attendance.nameToAttended.put(name,false);
+
+                    userAttended userRegestered = new userAttended(name,"false");
+                    userRegestered.setId(attendance.userAttendedList.size());
+                    attendance.userAttendedList.add(userRegestered);
+
+
+                    attendance.AttendedUsers.put(userID,false);
+                        // Storing data into bundle
+                        b.putString("qrCode", qrCode);
+
+                        mDatabaseRef.child(eventID).setValue(attendance);
+                        Log.d("EEERRE", "onDataChange:  if this is NEW");
+
+                    }
+
+                else
+                {
+
+                    Attendance attendance=attendanceTemp;
+                    if(!attendance.getUsersToQR().containsKey(userID)) {
+                        attendance.setCounter();
+                        attendance.setAbsent(attendance.getCounter());
+                        attendance.listIdtoUsers.put(userID,attendance.userAttendedList.size());
+                        userAttended userRegestered = new userAttended(name, "false");
+                        userRegestered.setId(attendance.userAttendedList.size());
+                        attendance.userAttendedList.add(userRegestered);
+                    }//to update the attendance counter if user is new attender
+
+
+                    attendance.getUsersToQR().put(userID,qrCode);
+                    attendance.AttendedUsers.put(userID,false);
+
+//                    attendance.nameToAttended.put(name,false);
+
+
+                    // Storing data into bundle
+                    b.putString("qrCode", qrCode);
+
+                    mDatabaseRef.child(eventID).setValue(attendance);
+                    Log.d("EEERRE", "onDataChange:  else this is not new it's updated ");
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
+
 
         // Creating Intent object
         Intent intent = new Intent(getContext(), qr_activity.class);
+        b.putString("qrCode", qrCode);
 
         // Storing bundle object into intent
         intent.putExtras(b);

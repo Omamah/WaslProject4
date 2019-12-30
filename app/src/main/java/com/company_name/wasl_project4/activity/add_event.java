@@ -75,7 +75,7 @@ public class add_event extends HomePage {
     private StorageTask mUploadTask;
 
 
-    //FOr Getting Current User Info
+    //For Getting Current User Info
     private FirebaseDatabase mFirebaseDatabase;
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
@@ -87,7 +87,7 @@ public class add_event extends HomePage {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); // this is the FrameLayout area within your activity_main.xml
+        FrameLayout contentFrameLayout = (FrameLayout) findViewById(R.id.content_frame); // this is the FrameLayout area
         getLayoutInflater().inflate(R.layout.activity_add_event, contentFrameLayout);
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.getMenu().getItem(1).setChecked(true);
@@ -281,7 +281,7 @@ public class add_event extends HomePage {
 
     private void uploadFile() {
         if (mImageUri != null) {
-            final StorageReference fileReference = mStorageRef.child(System.currentTimeMillis()
+            final StorageReference fileReference =  mStorageRef.child(System.currentTimeMillis()
                     + "." + getFileExtension(mImageUri));
 
             mUploadTask = fileReference.putFile(mImageUri)

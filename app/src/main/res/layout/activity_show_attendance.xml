@@ -1,0 +1,162 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".showAttendance">
+
+    <android.support.v4.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:ignore="MissingConstraints">
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <RelativeLayout
+                android:id="@+id/headerLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:paddingLeft="20dp"
+                android:paddingRight="20dp"
+                android:paddingBottom="20dp"
+                android:paddingTop="60dp">
+
+                <TextView
+                    android:id="@+id/dateTextView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentTop="true"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/whiteTextColor"/>
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignParentTop="true"
+                    />
+
+                <TextView
+                    android:id="@+id/salesHeaderTextView"
+                    android:layout_marginTop="30dp"
+                    style="@style/reportContentText" />
+
+                <Button
+                    android:id="@+id/scanAttendance"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/salesHeaderTextView"
+                    android:layout_marginTop="-46dp"
+                    android:layout_marginBottom="-3dp"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@android:color/white"
+                    android:background="@color/event_details_activity_raised_button_button_background_color"
+                    android:text="Scan Qr code" />
+
+                <TextView
+                    android:id="@+id/title"
+                    style="@style/viewParent.headerText"
+                    android:layout_centerHorizontal="true"
+                    android:textColor="@android:color/black"
+                    android:layout_below="@id/salesHeaderTextView"
+                    android:text="Event Attendance"
+                    android:layout_marginTop="10dp"
+                    android:layout_marginBottom="70dp"/>
+
+
+
+            </RelativeLayout>
+
+            <LinearLayout
+                android:id="@+id/cardLayout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/headerLayout"
+                android:layout_marginTop="-80dp">
+
+                <android.support.v7.widget.CardView
+                    app:cardCornerRadius="16dp"
+                    app:cardBackgroundColor="@color/whiteTextColor"
+                    style="@style/reportsCardStyle">
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/reportContentText"
+                            android:textColor="#79D0A3"
+                            android:text="Attended"/>
+
+                        <TextView
+                            android:id="@+id/attendCount"
+                            style="@style/viewParent.headerText"
+                            android:text="50"
+                            android:textSize="27sp" />
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+                <android.support.v7.widget.CardView
+                    app:cardCornerRadius="16dp"
+                    app:cardBackgroundColor="@color/whiteTextColor"
+                    style="@style/reportsCardStyle">
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:orientation="vertical">
+
+                        <TextView
+                            style="@style/reportContentText"
+                            android:textColor="#79D0A3"
+                            android:text="Absent"/>
+
+                        <TextView
+                            android:id="@+id/absentCount"
+                            style="@style/viewParent.headerText"
+                            android:text="20"
+                            android:textSize="27sp" />
+                    </LinearLayout>
+
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/cardLayout"
+                android:orientation="vertical">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical" />
+
+                <ScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent">
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/list"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent">
+                    </android.support.v7.widget.RecyclerView>
+                </ScrollView>
+            </LinearLayout>
+
+
+
+        </RelativeLayout>
+    </android.support.v4.widget.NestedScrollView>
+
+</android.support.constraint.ConstraintLayout>
