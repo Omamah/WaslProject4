@@ -72,6 +72,7 @@ dependencies {
 
     // Play Services
     implementation 'com.google.android.gms:play-services-maps:16.1.0'
+    implementation 'com.google.android.gms:play-services-places:16.1.0'
 
     // Page Control
     implementation 'com.romandanylyk:pageindicatorview:1.0.0'

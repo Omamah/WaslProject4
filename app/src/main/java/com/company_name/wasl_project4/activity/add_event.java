@@ -1,5 +1,8 @@
 package com.company_name.wasl_project4.activity;
 
+import android.app.DatePickerDialog;
+import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
 import android.net.Uri;
@@ -11,14 +14,20 @@ import android.util.Log;
 import android.view.View;
 import android.webkit.MimeTypeMap;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.company_name.wasl_project4.R;
+import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
+import com.google.android.gms.common.GooglePlayServicesRepairableException;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlacePicker;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -45,6 +54,15 @@ public class add_event extends HomePage {
     EditText for_edt;
     EditText Adress_edt;
     EditText Time_edt;
+    private int hour;
+    private int minute;
+    private int year;
+    private int month;
+    private int day;
+    static final int TIME_DIALOG_ID = 999;
+    static final int DATE_DIALOG_ID = 888;
+    int PLACE_PICKER_REQUEST = 1;
+    EditText Date_edt;
     EditText Desc_edt;
     private ImageView mImageView;
     private ProgressBar mProgressBar;
@@ -85,6 +103,7 @@ public class add_event extends HomePage {
         for_edt = findViewById(R.id.for_edt);
         Adress_edt = findViewById(R.id.Adress_edt);
         Time_edt = findViewById(R.id.Time_edt);
+        Date_edt = findViewById(R.id.Date_edt);
         Desc_edt = findViewById(R.id.Desc_edt);
 
         //For Getting Current User Info
@@ -102,6 +121,38 @@ public class add_event extends HomePage {
 
         mStorageRef = FirebaseStorage.getInstance().getReference("uploads");
         mDatabaseRef = FirebaseDatabase.getInstance().getReference("uploads");
+
+        Time_edt.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                showDialog(TIME_DIALOG_ID);
+
+            }});
+        Date_edt.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+
+                showDialog(DATE_DIALOG_ID);
+
+            }
+
+        });
+        Adress_edt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                PlacePicker.IntentBuilder builder = new PlacePicker.IntentBuilder();
+                try {
+                    startActivityForResult(builder.build(add_event.this),PLACE_PICKER_REQUEST);
+                } catch (GooglePlayServicesRepairableException e) {
+                    e.printStackTrace();
+                } catch (GooglePlayServicesNotAvailableException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
 
         mButtonChooseImage.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -130,6 +181,64 @@ public class add_event extends HomePage {
         });
     }
 
+    @Override
+    protected Dialog onCreateDialog(int id) {
+        switch (id) {
+            case TIME_DIALOG_ID:
+                // set time picker as current time
+                return new TimePickerDialog(this,
+                        timePickerListener, hour, minute,false);
+
+            case DATE_DIALOG_ID:
+                // set date picker as current date
+                return new DatePickerDialog(this, datePickerListener,
+                        year, month,day);
+
+        }
+        return null;
+    }
+    private TimePickerDialog.OnTimeSetListener timePickerListener =
+            new TimePickerDialog.OnTimeSetListener() {
+                public void onTimeSet(TimePicker view, int selectedHour,
+                                      int selectedMinute) {
+                    hour = selectedHour;
+                    minute = selectedMinute;
+
+                    // set current time into textview
+                    Time_edt.setText(new StringBuilder().append(pad(hour))
+                            .append(":").append(pad(minute)));
+
+
+
+                }
+            };
+    private DatePickerDialog.OnDateSetListener datePickerListener
+            = new DatePickerDialog.OnDateSetListener() {
+
+        // when dialog box is closed, below method will be called.
+        public void onDateSet(DatePicker view, int selectedYear,
+                              int selectedMonth, int selectedDay) {
+            year = selectedYear;
+            month = selectedMonth;
+            day = selectedDay;
+
+
+            // set selected date into textview
+            Date_edt.setText(new StringBuilder().append(month + 1)
+                    .append("-").append(day).append("-").append(year)
+                    .append(" "));
+
+
+
+        }
+    };
+    private static String pad(int c) {
+        if (c >= 10)
+            return String.valueOf(c);
+        else
+            return "0" + String.valueOf(c);
+    }
+
     private void openImagesActivity() {
         Intent intent = new Intent(this, myEvents.class);
         startActivity(intent);
@@ -152,6 +261,14 @@ public class add_event extends HomePage {
 
             Picasso.with(this).load(mImageUri).into(mImageView);
 
+        }
+        if (requestCode == PLACE_PICKER_REQUEST) {
+            if (resultCode == RESULT_OK) {
+                Place place = PlacePicker.getPlace(data, this);
+                String longtitude=String.valueOf(place.getLatLng().longitude);
+                String latitude=String.valueOf(place.getLatLng().latitude);
+                Adress_edt.setText(longtitude+" "+latitude);
+            }
         }
     }
 
