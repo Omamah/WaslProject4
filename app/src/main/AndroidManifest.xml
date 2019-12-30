@@ -8,6 +8,10 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme.NoActionBar">
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyC_u-CPShUq1scKNaeQuWNsRqy9mRiK8NM" />
         <activity android:name=".activity.qr_activity"></activity>
         <activity android:name=".activity.detailsEvent" />
         <activity android:name=".activity.MainActivity"></activity>
